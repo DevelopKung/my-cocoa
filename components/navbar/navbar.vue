@@ -19,7 +19,7 @@
           <UserMiniInfo />
           <v-divider></v-divider>
           <div class="text-center">
-            <v-btn block text @click="logout()">
+            <v-btn block text @click="$auth.logout()">
               <v-icon small left>fas fa-sign-out-alt</v-icon> logout
             </v-btn>
           </div>
@@ -37,7 +37,7 @@
       </v-row>
 
       <div class="text-center">
-        <h2>{{ $auth.user.firstname }}</h2>
+        <h2>{{ $auth.user.username }}</h2>
       </div>
 
       <v-card-subtitle class="pb-0 caption">My Pets</v-card-subtitle>
@@ -46,23 +46,14 @@
       <v-list nav dense>
         <v-list-item-group v-model="group" active-class="primary--text text--accent-4">
 
-          <v-list-item @click="$router.push('/pets/new')">
+          <v-list-item @click="$router.push(row.router)" v-for="(row,i) in lists_menu" :key="i">
             <v-list-item-icon>
               <v-badge color="primary" icon="mdi-plus" overlap>
-                <v-icon>mdi-paw</v-icon>
+                <v-icon>{{row.icon}}</v-icon>
               </v-badge>
             </v-list-item-icon>
-            <v-list-item-title>ADD PET</v-list-item-title>
+            <v-list-item-title>{{ row.text }}</v-list-item-title>
           </v-list-item>
-
-          <div v-if="lists_pets&&lists_pets.length > 0">
-            <v-list-item v-for="(pet, index) in lists_pets" :key="index" @click="$router.push('/pets/' + pet._id)">
-            <v-list-item-icon>
-              <v-icon>mdi-paw</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>{{pet.pet_name}}</v-list-item-title>
-          </v-list-item>
-          </div>
 
         </v-list-item-group>
       </v-list>
@@ -76,12 +67,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import UserMiniInfo from '@/components/navbar/MiniInfo'
 export default {
-  components: {
-    UserMiniInfo,
-  },
+  components: { UserMiniInfo, },
   props: {
     title: {
       type: String,
@@ -93,7 +81,14 @@ export default {
       drawer: false,
       group: null,
       profile_menu: false,
-      profilePicture: null
+      profilePicture: null,
+      lists_menu: [{
+          router: '/bill',
+          text: 'เปิดบิล',
+          icon: 'fas fa-cart-plus'
+        },
+        // { router: '', text: '', icon: '' },
+      ]
     }
   }
 }

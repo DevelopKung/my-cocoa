@@ -8,7 +8,7 @@
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>{{ info.firstname }} {{ info.lastname }}</v-list-item-title>
+        <v-list-item-title>{{ info.username }}</v-list-item-title>
         <v-list-item-subtitle class="caption">{{ app_version }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

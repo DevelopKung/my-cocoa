@@ -1,12 +1,11 @@
 <template>
 <div>
   <v-app>
-    <!-- <Navbar :title="'My Pets'">
+    <Navbar :title="'My Pets'">
      <div class="mt-12">
       <Nuxt />
      </div>
-    </Navbar> -->
-    <Nuxt />
+    </Navbar>
   </v-app>
 </div>
 </template>
