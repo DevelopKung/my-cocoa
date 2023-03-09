@@ -2,7 +2,6 @@ import colors from 'vuetify/es5/util/colors'
 const env = require('dotenv').config()
 let url_api = process.env.NODE_ENV == 'development' ? process.env.URL_API_DEV : process.env.URL_API;
 let base_url = process.env.NODE_ENV == 'development' ? '/' : process.env.GITPAGES_NAME
-let setAuthUrl = process.env.NODE_ENV == 'development' ? '/api/' : process.env.GITPAGES_NAME + '/api/'
 export default {
   publicRuntimeConfig: {
     myApp: {
@@ -37,6 +36,8 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     { src: '~plugins/vuetify.js', mode: 'client' },
+    { src: '~plugins/VueNumeral.js', mode: 'client' },
+    { src: '~plugins/sweetalert.js', mode: 'client' },
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -60,7 +61,8 @@ export default {
   modules: [
     '@nuxtjs/auth',
     '@nuxtjs/axios',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    'vue-sweetalert2/nuxt'
   ],
 
   sweetalert: {
@@ -107,7 +109,7 @@ export default {
           success: colors.green.accent3
         },
         light: {
-          primary: '#FF4081'
+          primary: '#ff9800'
         }
       }
     }

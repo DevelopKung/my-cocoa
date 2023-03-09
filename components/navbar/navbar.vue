@@ -48,9 +48,10 @@
 
           <v-list-item @click="$router.push(row.router)" v-for="(row,i) in lists_menu" :key="i">
             <v-list-item-icon>
-              <v-badge color="primary" icon="mdi-plus" overlap>
+              <v-badge v-if="row.hideIconPlus" color="primary" icon="mdi-plus" overlap>
                 <v-icon>{{row.icon}}</v-icon>
               </v-badge>
+              <v-icon v-else>{{row.icon}}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ row.text }}</v-list-item-title>
           </v-list-item>
@@ -82,12 +83,11 @@ export default {
       group: null,
       profile_menu: false,
       profilePicture: null,
-      lists_menu: [{
-          router: '/bill',
-          text: 'เปิดบิล',
-          icon: 'fas fa-cart-plus'
-        },
-        // { router: '', text: '', icon: '' },
+      lists_menu: [
+        { router: '/',        text: 'เปิดบิล',      icon: 'fas fa-cart-plus', hideIconPlus: true },
+        { router: '/product', text: 'ตั้งค่าสินค้า',   icon: 'fas fa-cog',       hideIconPlus: false },
+        { router: '/topping', text: 'ตั้งค่าท็อปปิ้ง',  icon: 'fas fa-cog',       hideIconPlus: false },
+        { router: '/bill',    text: 'ตรวจสอบบิล',  icon: 'fas fa-file-alt',  hideIconPlus: false },
       ]
     }
   }

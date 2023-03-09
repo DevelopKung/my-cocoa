@@ -1,0 +1,153 @@
+<template>
+<div>
+  <Loader v-if="loading" :loading="loading" />
+
+  <v-row v-else>
+    <v-col cols="12" sm="12" md="6">
+      <v-card flat outlined>
+        <v-card-title> {{ form_mode == 'add'? 'สร้าง':'อัพเดท' }} สินค้า</v-card-title>
+        <v-card-text>
+          <v-form ref="form" v-model="form_valid">
+            <v-text-field v-model="form.prod_name" class="mb-2" label="ชื่อ" placeholder="ชื่อ" outlined dense :rules="[rules.required]"></v-text-field>
+            <v-select v-model="form.prod_type" class="mb-2" :items="type" label="ประเภท" placeholder="ประเภท" outlined dense :rules="[rules.required]"></v-select>
+            <v-text-field v-model="form.description" class="mb-2" label="รายละเอียด" placeholder="รายละเอียด" outlined dense></v-text-field>
+            <v-text-field v-model="form.price" class="mb-2" label="ราคา" placeholder="ราคา" outlined dense :rules="[rules.required]"></v-text-field>
+            <v-radio-group v-model="form.status" label="สถานะ" row>
+              <v-radio label="เปิดใช้งาน" :value="true"></v-radio>
+              <v-radio label="ปิดใช้งาน" :value="false"></v-radio>
+            </v-radio-group>
+
+            <div class="text-center">
+              <v-btn color="primary" class="mx-1" depressed rounded :disabled="!form_valid" @click="saveForm()">
+                <v-icon left small>fa fa-check</v-icon>
+                บันทึก
+              </v-btn>
+              <v-btn color="default" class="mx-1" depressed rounded @click="$router.back()">
+                <v-icon left small>fa fa-times</v-icon>
+                ยกเลิก
+              </v-btn>
+            </div>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
+</div>
+</template>
+
+<script>
+import {
+  mapActions
+} from "vuex";
+import Swal from 'sweetalert2'
+export default {
+  data() {
+    return {
+      form_mode: 'add',
+      form_valid: true,
+      id: null,
+      loading: false,
+      form: {
+        status: true
+      },
+      rules: {
+        required: value => !!value || "กรุณากรอกข้อมูล"
+      },
+      type: ['เครื่องดื่ม', 'อาหาร', 'อื่นๆ']
+    }
+  },
+  methods: {
+    ...mapActions({
+      create: 'product/create',
+      loadInfo: 'product/loadInfo',
+      update: 'product/update',
+      loadData: 'product/loadData'
+    }),
+
+    async getInfo(id) {
+      this.loading = true
+      const res = await this.loadInfo(id)
+      this.loading = false
+      if (res.status) {
+        this.form = res.payload
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: res.message,
+        }).then((result) => {
+          if (result.isConfirmed || !result.isConfirmed) {
+            this.$router.replace('/product')
+          }
+        })
+      }
+    },
+
+    saveForm() {
+      if (this.form_mode == 'add') {
+        this.createData()
+      } else {
+        this.updateData(this.id)
+      }
+    },
+
+    async createData() {
+      this.loading = true
+      const res = await this.create(this.form)
+      if (res.status) {
+        Swal.fire({
+          icon: 'success',
+          title: 'สำเร็จ',
+          text: res.message,
+        }).then(async (result) => {
+          await this.loadData()
+          if (result.isConfirmed || !result.isConfirmed) {
+            this.$router.replace('/product')
+          }
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: res.message,
+        })
+      }
+      this.loading = false
+    },
+
+    async updateData() {
+      this.loading = true
+      const res = await this.update({
+        id: this.id,
+        data: this.form
+      })
+      this.loading = false
+      if (res.status) {
+        Swal.fire({
+          icon: 'success',
+          title: 'สำเร็จ',
+          text: res.message,
+        }).then((result) => {
+          if (result.isConfirmed || !result.isConfirmed) {
+            this.$router.replace('/product')
+          }
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'เกิดข้อผิดพลาด',
+          text: res.message,
+        })
+      }
+    }
+  },
+  created() {
+    this.id = this.$route.params.id
+    if (this.id && this.id != 'new') {
+      this.getInfo(this.id)
+      this.form_mode = 'edit'
+    }
+  }
+
+}
+</script>

@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-app>
-    <Navbar :title="'My Pets'">
+    <Navbar :title="'My Shop Cocoa'">
      <div class="mt-12">
       <Nuxt />
      </div>
