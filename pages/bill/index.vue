@@ -44,7 +44,7 @@
   <script>
   import { mapActions } from 'vuex'
   import Swal from 'sweetalert2'
-  console.log(mapActions);
+  
   export default {
     data() {
       return {
