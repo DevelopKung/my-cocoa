@@ -44,7 +44,7 @@
   <script>
   import { mapActions } from 'vuex'
   import Swal from 'sweetalert2'
-  
+
   export default {
     data() {
       return {
@@ -69,7 +69,7 @@
             },
             {
               text: "ชื่อ",
-              value: 'prod_name',
+              value: 'prod_id',
               inlineFilter: false,
               sortable: false
             },
